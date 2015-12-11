@@ -1,6 +1,6 @@
 	
 
-    program Project1;
+
     uses crt;
     type
       listPtr=^List;
