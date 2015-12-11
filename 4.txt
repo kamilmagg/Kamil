@@ -1,0 +1,231 @@
+program Sortowanie;
+
+uses crt,DOS;
+
+const
+  N=1000000;
+
+var
+  i,j,tmp,min,k:integer;
+  tab : array[0..N] of integer;
+  g0,m0,s0,s100:word;
+  g1,m1,s1,s101:word;
+
+/////////////////////////B¥BELKOWO//////////////////////////////////////////////
+function bubble:integer;
+begin
+    for j := N-1 downto 1 do
+        for i:=1 to j do
+            if tab[i] > tab[i+1] then
+            begin
+              tmp := tab[i];
+              tab[i] := tab[i+1];
+              tab[i+1] := tmp;
+            end;
+end;
+/////////////////////////WYBIERANIE/////////////////////////////////////////////
+function wybieranie:integer;
+begin
+   for j := 1 to N-1 do
+       begin
+            min := j;
+            for i := j+1 to N do
+                if tab[i]<tab[min] then
+                begin
+                   min := i;
+                   tmp := tab[min];
+                   tab[min] := tab[j];
+                   tab[j] := tmp;
+                end;
+       end;
+end;
+/////////////////////////WSTAWIANIE/////////////////////////////////////////////
+function wstawianie:integer;
+begin
+     for j := N-1 downto 1 do
+         begin
+              tmp := tab[j];
+              i := j+1;
+              while( i <= N) and ( tmp > tab[i]) do
+                     begin
+                          tab[i - 1] := tab[i];
+                          inc(i);
+                     end;
+                          tab[i - 1] := tmp;
+                     end;
+end;
+/////////////////////////KOPCOWANIE/////////////////////////////////////////////
+procedure shift_down(n,i: integer);  //przesowanie polowy elementow w dol
+var
+  j,k: integer;
+  tmp: integer;
+begin
+  k := i;
+  repeat
+    j := k;
+    if (2*j <= n) and (tab[2*j] > tab[k]) then
+       k := 2*j;
+    if (2*j+1 <= n) and (tab[2*j+1] > tab[k]) then
+       k := 2*j+1;
+    tmp:=tab[j];
+    tab[j]:=tab[k];
+    tab[k]:=tmp;
+  until j = k;
+end;
+
+procedure sort;
+var
+  i: integer;
+  tmp: integer;
+begin
+  for i:=N downto 2 do
+  begin
+    tmp:=tab[1];
+    tab[1]:=tab[i];
+    tab[i]:=tmp;
+    shift_down(i-1,1);
+  end;
+end;
+
+function kopcowanie:integer;
+begin
+    for i := 2 to N do   //Budowa kopca
+    begin
+        j := i;
+        k := j div 2;
+        tmp := tab[i];
+        while (k > 0) and (tab[k] < tmp) do
+        begin
+             tab[j] := tab[k];
+             j := k;
+             k := j div 2;
+        end;
+             tab[j] := tmp;
+
+    end;               //koniec budowy
+    sort;              //wykonanie procedur sortowania kopca
+end;
+/////////////////////////QUICKSORT//////////////////////////////////////////////
+procedure Quicksort(lewy, prawy : integer);
+var
+  i,j,rev,tmp : integer;
+begin
+  i := (lewy + prawy) div 2;
+  rev := tab[i];
+  tab[i] := tab[prawy];
+  j := lewy;
+  for i := lewy to prawy - 1 do
+    if tab[i] < rev then
+    begin
+      tmp := tab[i];
+      tab[i] := tab[j];
+      tab[j] := tmp;
+      inc(j);
+    end;
+  tab[prawy] := tab[j];
+  tab[j] := rev;
+  if lewy < j - 1  then Quicksort(lewy, j - 1);
+  if j + 1 < prawy then Quicksort(j + 1, prawy);
+end;
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+////////// PROGRAM G£ÓWNY //////////IWO WOJCIECHOWSKI///////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+begin
+    writeln;
+    writeln('Nieposortowane wartosci: ');   //NIEPOSORTOWANE
+    for i := 1 to N+1 do
+    begin
+         tab[i]:=random(N);
+         //write(tab[i]);
+         //write(' ');
+    end;
+    writeln;
+    writeln;
+
+    GetTime(g0,m0,s0,s100);
+
+    bubble;      //POSORTOWANE B¥BELKOWO
+
+    GetTime(g1,m1,s1,s101);
+    WriteLn('Czas sortowania b¹belkowego : ',g1-g0,' g :',m1-m0,' min :',s1-s0,' sec :',s101-s100,' set');
+
+    writeln('Wartosci posortowane babelkowo: ');
+    for i:=1 to N do
+        begin
+             //write(tab[i]);
+             //write(' ');
+        end;
+
+    writeln;
+    writeln;
+
+    GetTime(g0,m0,s0,s100);
+
+    wybieranie;  //POSORTOWANE PRZEZ WYTBIERANIE
+
+    GetTime(g1,m1,s1,s101);
+    WriteLn('Czas sortowania przez wybieranie : ',g1-g0,' g :',m1-m0,' min :',s1-s0,' sec :',s101-s100,' set');
+
+    writeln('Wartosci posortowane przez wybieranie: ');
+   for i := 1 to N do
+       begin
+            //write(tab[i]);
+            //write(' ');
+       end;
+
+    writeln;
+    writeln;
+
+    GetTime(g0,m0,s0,s100);
+
+    wstawianie;   //POSORTOWANE PRZEZ WSTAWIANIE
+
+    GetTime(g1,m1,s1,s101);
+    WriteLn('Czas sortowania przez wstawianie : ',g1-g0,' g :',m1-m0,' min :',s1-s0,' sec :',s101-s100,' set');
+
+    writeln('Wartosci posortowane przez wstawianie: ');
+     for i := 1 to N do
+     begin
+         //write(tab[i]);
+         //write(' ');
+     end;
+
+    writeln;
+    writeln;
+
+    GetTime(g0,m0,s0,s100);
+
+    kopcowanie;   //POSOROTWANIE PRZEZ KOPCOWANIE
+
+    GetTime(g1,m1,s1,s101);
+    WriteLn('Czas sortowania przez kopcowanie : ',g1-g0,' g :',m1-m0,' min :',s1-s0,' sec :',s101-s100,' set');
+
+    writeln('Wartosci posortowane przez kopcowanie: ');
+     for i := 1 to N do
+     begin
+         //write(tab[i]);
+         //write(' ');
+     end;
+
+    writeln;
+    writeln;
+
+    GetTime(g0,m0,s0,s100);
+
+    Quicksort(1,N); //POSORTOWANE PRZEZ QUICKSORT
+
+    GetTime(g1,m1,s1,s101);
+    WriteLn('Czas sortowania przez quicksort : ',g1-g0,' g :',m1-m0,' min :',s1-s0,' sec :',s101-s100,' set');
+
+    writeln('Wartosci posortowane przez Quicksort: ');
+     for i := 1 to N do
+     begin
+         //write(tab[i]);
+         //write(' ');
+     end;
+
+
+   readkey;
+end.

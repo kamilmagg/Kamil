@@ -1,0 +1,50 @@
+program silnia;
+uses crt,DOS;
+var
+  n:integer;
+  godz1,min1,sek1,sek1001:word;
+  godz2,min2,sek2,sek1002:word;
+
+function silniar(n:integer):longint;
+         begin
+           if (n=1) then
+           silniar:=1
+           else
+           silniar:=n*silniar(n-1);
+         end;
+function silniai(n:integer):longint;
+var i:integer;
+         begin
+           silniai:=1;
+           for i:=1 to n do
+           begin
+                silniai:=silniai*i;
+           end;
+         end;
+
+begin
+  write('Podaj liczbe z ktorej chcesz wyliczyc silnie: ');
+  readln(n);
+
+  write('silnia z ',n,' to (rekutrencyjnie): ');
+
+  GetTime(godz1,min1,sek1,sek1001);
+
+  writeln(silniar(n));
+
+  GetTime(godz2,min2,sek2,sek1002);
+  write('czas obliczen: ');
+  writeln(godz2-godz1,':',min2-min1,':',sek2-sek1,':',sek1002-sek1001);
+
+  write('silnia z ',n,' to (iteracyjnie): ');
+
+  GetTime(godz3,min3,sek3,sek1003);
+
+  writeln(silniai(n));
+
+  GetTime(godz4,min4,sek4,sek1004);
+
+
+  readkey;
+
+ end.

@@ -1,0 +1,87 @@
+program zadanie2;
+
+uses crt,dos;
+
+type
+  dataP=^dataS;
+  dataS = record
+    bracket:char;
+    next:dataP;
+  end;
+
+var
+  brackets:string;
+  first:dataP;
+    i:integer;
+
+procedure push_front(var first:dataP ; bracket:char);
+var new_:dataP;
+
+begin
+  new(new_);
+  if (first=nil) then begin
+    first:=new_;
+    new_^.next:=nil;
+  end else begin
+    new_^.next:=first;
+    first:=new_;
+  end;
+  first^.bracket:=bracket;
+end;
+
+procedure pop_front(var first:dataP);
+var
+  tmp:dataP;
+
+begin
+  if (first <> nil) then begin
+     tmp:=first;
+     first:=tmp^.next;
+     dispose(tmp);
+  end;
+end;
+
+function isEmpty(var first:dataP):boolean;
+begin
+  if first=nil then isEmpty:=true
+  else isEmpty:=false;
+end;
+
+begin
+  first:=nil;
+  readln(brackets);
+  for i:=1 to length(brackets) do begin
+      if ((brackets[i]='{') or (brackets[i]='[')) or (brackets[i]='(') then begin
+        push_front(first,brackets[i]);
+      end else if ((brackets[i]='}') or (brackets[i]=']')) or (brackets[i]=')') then begin
+        case brackets[i] of
+          '}': begin
+                 if (first^.bracket='{') then
+                   pop_front(first)else begin
+                     writeln('BLAD!');
+                     break;
+                   end;
+               end;
+          ']': begin
+                 if (first^.bracket='[') then
+                   pop_front(first)else begin
+                     writeln('BLAD!');
+                     break;
+                   end;
+               end;
+          ')': begin
+                 if (first^.bracket='(') then
+                   pop_front(first)else begin
+                     writeln('BLAD!');
+                     break;
+                   end;
+               end;
+        end;
+      end  else begin
+        writeln('BLAD!');
+        break;
+      end;
+  end;
+  if isEmpty(first)=true then writeln('Poprawne nawiasowanie :)');
+  readkey;
+end.

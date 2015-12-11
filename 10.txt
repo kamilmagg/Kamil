@@ -1,0 +1,50 @@
+program zadanie_4_1;
+ 
+uses crt;
+var tLinijka:array of integer;
+  lin,kol,kol_wczy,lin_wczy:integer;
+ 
+begin
+     {tLinijka[i]:=j oznacza w i-tej linijce i j-tej kolumnie jest kropla}
+     write('Podaj ile kolumn: ');
+     read(kol_wczy);
+     write('Podaj ile linijek: ');
+     read(lin_wczy);
+ 
+     {zerowanie tablicy}
+     setlength(tLinijka,lin_wczy);
+     for lin:=1 to lin_wczy do
+         tLinijka[lin]:=0;
+ 
+ 
+     repeat
+         begin
+         {nowa kropla}
+         randomize;
+         tLinijka[1]:=random(kol_wczy);
+ 
+		 clrscr;
+		 writeln('Aby zakonczyc nacisnij dowolny klawisz');
+		 writeln;
+         for lin:= 1 to lin_wczy do
+             begin
+             for kol:=1 to kol_wczy do
+                 begin
+                 if( kol = tLinijka[lin] ) then
+                   write('X ')
+                 else
+                   write('O ')
+                 end;
+             writeln();
+             end;
+ 
+         delay(300);
+         clrscr;
+ 
+         for lin:=lin_wczy-1 downto 1 do
+             tLinijka[lin+1]:=tLinijka[lin];
+         end;
+ 
+ 
+	until keypressed;
+end.

@@ -1,0 +1,42 @@
+program zadanie5;
+uses crt;
+var
+  n:integer;
+
+function fibit(n: integer): integer;
+   var
+     nty, i: integer;
+     a,b: integer;
+begin
+     a:=1;
+     b:=1;
+    if n<3 then fibit:=n
+    else
+     for i:=3 to n do
+     begin
+        nty:=a+b;
+        a:=b;
+        b:=nty;
+      end;
+     fibit:=nty;
+end;
+
+function fibr(n: integer) : integer;
+begin
+     if n=0 then fibr:=0
+     else if n=1 then fibr:=1
+     else fibr:=fibr(n-1)+fibr(n-2)
+
+
+end;
+begin
+
+ writeln('podaj n ');
+ readln(n);
+
+ writeln('nty wyraz to', fibr(n));
+ writeln;
+   writeln('nty iteracyjnie wyraz to', fibit(n));
+ readln;
+
+ end.

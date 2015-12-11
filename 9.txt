@@ -1,0 +1,81 @@
+program kwadratstwo;
+uses crt;
+const
+  BAZOWYKOLOR=8;
+  PODSWIETLONY=15;
+var
+  wysokosc,szerokosc:byte;
+(* Sprawdza poprawnosc (duuuuuh)*)
+procedure sprawdzPoprawnosc(var dana:byte);
+begin
+  while NOT(odd(dana)) do begin
+    write('Podana szerokosc jest nieobslugiwana, wpisz liczbe nieparzysta: ');
+    readln(dana);
+  end;
+end;
+(*Funkcja liczaca odleglosc*)
+function odleglosc(punkt1:byte;punkt2:byte):byte;
+begin
+  if (punkt1-punkt2<0) then
+     odleglosc:=(punkt2-punkt1+1)
+  else
+     odleglosc:=(punkt1-punkt2+1);
+end;
+ (*Zapisuje tablice wszystkiego*)
+procedure zapiszTablice(zwysokosc:byte;zszerokosc:byte);
+var
+  srodekX,srodekY,x,y:byte;
+  warunekOdleglosci:byte;
+  kierunek:boolean;
+begin
+  randomize;
+  textcolor(BAZOWYKOLOR);
+  srodekX:=(zszerokosc div 2)+1;
+  srodekY:=(zwysokosc div 2)+1;
+  warunekOdleglosci:=0;
+  while (TRUE) do begin
+    clrscr;
+    for y:=1 to zwysokosc do
+    begin
+      for x:=1 to zszerokosc do
+      begin
+        if (odleglosc(srodekX,x)=warunekOdleglosci)AND(odleglosc(srodekY,y)<=warunekOdleglosci)OR
+           (odleglosc(srodekY,y)=warunekOdleglosci)AND(odleglosc(srodekX,x)<=warunekOdleglosci)then begin
+          textcolor(PODSWIETLONY);
+          write('X');
+          textcolor(BAZOWYKOLOR);
+          end
+        else write('O');
+      end;
+      writeln;
+    end;
+    (*zmiana polozenia x-ow*)
+    if (warunekOdleglosci=zwysokosc div 2)OR(warunekOdleglosci=zszerokosc div 2) then
+      kierunek:=FALSE
+    else if warunekOdleglosci=0 then
+         kierunek:=TRUE;
+    if kierunek then
+      warunekOdleglosci+=1
+    else
+      warunekOdleglosci-=1;
+    delay(300);
+  end;
+end;
+ (* duh *)
+procedure zbierzDane(var dwysokosc:byte;var dszerokosc:byte);
+begin
+  write('Podaj wysokosc tablicy: ');
+  readln(dwysokosc);
+  sprawdzPoprawnosc(dwysokosc);
+  write('Podaj szerokosc tablicy: ');
+  readln(dszerokosc);
+  sprawdzPoprawnosc(dszerokosc);
+  clrscr;
+end;
+(* Program glowny *)
+begin
+	repeat
+  zbierzDane(wysokosc,szerokosc);
+  zapiszTablice(wysokosc,szerokosc);
+  until keypressed
+end.

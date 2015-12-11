@@ -1,0 +1,136 @@
+	
+
+    program Project1;
+    uses crt;
+    type
+      listPtr=^List;
+      List = record
+        nazwisko:string;
+        punkty:integer;
+        next:listPtr;
+      end;
+    var
+      head:listPtr;
+     
+    procedure pushFront(name:string;p:integer);
+    var
+      nowy:ListPtr;
+    begin
+      new(nowy);
+      nowy^.nazwisko:=name;
+      nowy^.punkty:=p;
+      nowy^.next:=head;
+      head:=nowy;
+    end;
+     
+    procedure pushEnd(name:string;p:integer);
+    var
+      nowy,it:ListPtr;
+    begin
+      new(nowy);
+      nowy^.nazwisko:=name;
+      nowy^.punkty:=p;
+      it:=head;
+      while (it^.next<>NIL)do
+        it:=it^.next;
+      it^.next:=nowy;
+      it^.next^.next:=NIL;
+    end;
+     
+    procedure delFront;
+    var
+      tmp:listPtr;
+    begin
+      tmp:=head;
+      if tmp=NIL then exit;
+      head:=tmp^.next;
+      dispose(tmp);
+    end;
+     
+    procedure delEnd;
+    var
+      tmp,it:listPtr;
+    begin
+      if head=NIL then exit;
+      it:=head;
+      tmp:=head;
+      while (it^.next<>NIL)do
+      begin
+        tmp:=it;
+        it:=it^.next;
+      end;
+      dispose(it);
+      if head^.next<>NIL then
+        tmp^.next:=NIL
+      else
+        head:=NIL;
+    end;
+     
+    procedure printList;
+    var
+      it:listPtr;
+    begin
+      it:=head;
+      while it<>NIL do
+      begin
+        writeln(it^.nazwisko,' - ',it^.punkty,' pkt');
+        it:=it^.next;
+      end;
+    end;
+     
+    procedure printMax;
+    var
+      it:listPtr;
+      max:listPtr;
+      maxV:integer;
+    begin
+      it:=head;
+      maxV:=0;
+      if head=NIL then exit;
+      while it<>NIL do
+      begin
+        if it^.punkty>maxV then
+        begin
+          maxV:=it^.punkty;
+          max:=it;
+        end;
+        it:=it^.next;
+      end;
+     
+      writeln;
+      writeln('Najlepszy wynik');
+      if max<>NIL then
+      writeln(max^.nazwisko,' - ',max^.punkty,' pkt');
+    end;
+     
+    procedure addElement;
+    var
+      name:string;
+      p:integer;
+    begin
+      readln;
+      write('Nazwisko - ');
+      read(name);
+      write('Ilosc punktow - ');
+      read(p);
+      if head=NIL then
+        pushFront(name,p)
+      else
+        pushEnd(name,p);
+    end;
+     
+    var
+      i:integer;
+    begin
+       writeln('nacisnij klawisz');
+       for i:=1 to 5 do
+       begin
+         addElement;
+       end;
+       //delEnd;
+       //delFront;
+       writeln;
+       printList;
+       printMax;
+       readkey;
+    end.

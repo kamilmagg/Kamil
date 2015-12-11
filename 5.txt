@@ -1,0 +1,36 @@
+program zadanie6;
+
+uses
+  crt;
+
+Function pascal(n,k:integer):integer;
+  begin
+    if (k=0) or (k=n) then
+       begin
+          pascal := 1;
+       end
+    else
+       begin
+           pascal := pascal(n-1, k-1) + pascal(n-1,k);
+       end;
+  end;
+
+var
+  i: integer;
+  j: integer;
+
+begin
+    for j:=0 to 10 do
+      begin
+         {wykonujemy do j, poniewa¿ w ka¿dym wierszu jest inna ilosc pozycji}
+         for i:=0 to j do
+             begin
+               {j=n, i=k}
+               write(pascal(j,i));
+               write(' ');
+             end;
+         {po kazdym wierszu odstep}
+         writeLn();
+      end;
+    readln;
+end.
