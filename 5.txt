@@ -1,3 +1,4 @@
+master
 program zadanie6;
 
 uses
